@@ -4,6 +4,8 @@
 <dict>
 	<key>bundleid</key>
 	<string>hangyutech.com</string>
+	<key>category</key>
+	<string>Tools</string>
 	<key>connections</key>
 	<dict>
 		<key>B21D0E9C-5FF8-4134-9D87-7F8CBC1D0B99</key>
@@ -21,7 +23,7 @@
 		</array>
 	</dict>
 	<key>createdby</key>
-	<string>Wicon wang</string>
+	<string>Wicon Wang</string>
 	<key>description</key>
 	<string>translate time and  timestamp</string>
 	<key>disabled</key>
@@ -35,12 +37,18 @@
 			<dict>
 				<key>alfredfiltersresults</key>
 				<false/>
-				<key>argumenttype</key>
+				<key>alfredfiltersresultsmatchmode</key>
 				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>keyword</key>
-				<string>time</string>
+				<string>ts</string>
 				<key>queuedelaycustom</key>
 				<integer>1</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -77,7 +85,7 @@ $TimeStamp-&gt;getTimeStamp('{query}');
 			<key>uid</key>
 			<string>B21D0E9C-5FF8-4134-9D87-7F8CBC1D0B99</string>
 			<key>version</key>
-			<integer>2</integer>
+			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -94,7 +102,7 @@ $TimeStamp-&gt;getTimeStamp('{query}');
 			<key>uid</key>
 			<string>05E3C7F1-C014-47D9-BA23-92F01EDC0D56</string>
 			<key>version</key>
-			<integer>2</integer>
+			<integer>3</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -117,6 +125,6 @@ $TimeStamp-&gt;getTimeStamp('{query}');
 		</dict>
 	</dict>
 	<key>webaddress</key>
-	<string>www.hangyutech.com</string>
+	<string>https://github.com/WiconWang</string>
 </dict>
 </plist>

@@ -1,5 +1,7 @@
 <?php
-ini_set('date.timezone','Asia/Shanghai');
+$timezone = 'Asia/Shanghai';
+ini_set('date.timezone', $timezone);
+
 require_once('workflows.php');
 
 class TimeStamp{
@@ -10,19 +12,76 @@ class TimeStamp{
 
     public function getTimeStamp($query){
         $workflows = new Workflows();
-        $now = time();
+
+        list($msec, $now) = explode(' ', microtime());
+
+        $msectime = (float)sprintf('%.0f', (floatval($msec) + floatval($now)) * 1000);
+
         $query = trim($query);
 
-        if ($query == 'now') {
-            $workflows->result( $query,
-                time(),
-                '当前时间戳：'.time(),
-                '当前时间：'.date('Y-m-d H:i:s',time()),
-                'icon.png',false);
+        if ($query == 'now' || $query == "") {
+            $workflows->result(
+                $query,
+                $now,
+                '当前时间戳【秒级】：'.$now,
+                '',
+                'icon.png',
+                false,
+            );
+
+            $workflows->result(
+                $query,
+                $msectime,
+                '当前时间戳【毫秒】：'.$msectime,
+                '',
+                'icon.png',
+                false,
+            );
+
+            $date = date('Y-m-d H:i:s',$now);
+            $workflows->result(
+                $query,
+                $date,
+                '当前时间：'.$date,
+                '',
+                'icon.png',
+                false,
+            );
 
             echo $workflows->toxml();
+            exit();
         }
-        if(is_numeric($query)){
+
+        if (preg_match('/\d*[\-\+]+[\d]*$/', $query)) {
+            // 输入-x +x的格式
+            if (strpos($query, '-') == 0) {
+                $query = "$now$query";
+            }
+            // 能做加减运算
+            $query = eval("return $query;");
+
+            $workflows->result(
+                $query,
+                $query,
+                '计算后时间戳：' . $query,
+                '',
+                'icon.png',false
+            );
+        }
+
+        if(is_numeric($query)) {
+            // 毫秒时间戳转换
+            switch (strlen($query)) {
+                case 13:
+                    $query = $query / 1000;
+                    break;
+                case 10:
+                    break;
+
+                default:
+                    exit;
+            }
+
             $cle = $query-$now;
             if ($cle > 0) {
                 $d = floor($cle/3600/24);
@@ -46,17 +105,17 @@ class TimeStamp{
                 "当前时间差 $d 天 $h 小时 $m 分 $s 秒",
                 'icon.png',false);
             echo $workflows->toxml();
-        }
-        if ($this->isDateTime($query)) {
-            $workflows->result( $query,
+
+        } else if ($this->isDateTime($query)) {
+            $workflows->result($query,
                 strtotime($query),
                 '目标时间戳：'.strtotime($query),
                 '与当前时间戳差：'.(strtotime($query)-$now).'秒',
                 'icon.png',false);
             echo $workflows->toxml();
         }
-        exit;
 
+        exit;
     }
 
 }
