@@ -52,7 +52,7 @@ class TimeStamp{
             exit();
         }
 
-        if (preg_match('/\d*[\-\+]+[\d]*$/', $query)) {
+        if (preg_match('/\d*[\-\+\*\/]+[\d]*$/', $query)) {
             // 输入-x +x的格式
             if (strpos($query, '-') == 0) {
                 $query = "$now$query";
