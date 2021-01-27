@@ -15,9 +15,12 @@ class TimeStamp {
 
         list($msec, $now) = explode(' ', microtime());
         $query = trim($query);
+        $query = eval("return $query;");
 
         if ($query == 'now' || $query == "") {
             $msectime = (float)sprintf('%.0f', (floatval($msec) + floatval($now)) * 1000);
+            $date = date('Y-m-d H:i:s',$now);
+
             $workflows->result(
                 $query,
                 $now,
@@ -36,7 +39,6 @@ class TimeStamp {
                 false,
             );
 
-            $date = date('Y-m-d H:i:s',$now);
             $workflows->result(
                 $query,
                 $date,
@@ -46,7 +48,7 @@ class TimeStamp {
                 false,
             );
 
-        } else if(is_numeric($query)) {
+        } else if (is_numeric($query)) {
             // 毫秒时间戳转换
             switch (strlen($query)) {
                 case 13:
@@ -54,9 +56,8 @@ class TimeStamp {
                     break;
                 case 10:
                     break;
-
                 default:
-                    exit;
+                    $query = $now + $query;
             }
 
             $cle = $query-$now;
@@ -82,40 +83,6 @@ class TimeStamp {
                 "当前时间差 $d 天 $h 小时 $m 分 $s 秒",
                 'icon.png',false);
 
-        } else if (preg_match('/^\d+[\-\+\*\/\d]*\d+$/', $query)) {
-            // 输入-x +x的格式
-            if (strpos($query, '-') == 0) {
-                $query = "$now$query";
-            }
-            // 能做加减运算
-            $result = eval("return $query;");
-
-            switch (strlen($result)) {
-                case 13:
-                    $result = $result / 1000;
-                    break;
-                case 10:
-                    break;
-
-                default:
-                    exit;
-            }
-
-            $workflows->result(
-                $query,
-                $result,
-                '计算后时间戳：' . $result,
-                '',
-                'icon.png',false
-            );
-
-            $workflows->result(
-                $query,
-                date("Y-m-d H:i:s", $result),
-                '计算后时间：    ' . date("Y-m-d H:i:s", $result),
-                '',
-                'icon.png',false
-            );
         } else if ($this->isDateTime($query)) {
             $workflows->result($query,
                 strtotime($query),
